@@ -17,7 +17,7 @@
         flex-wrap: wrap;
     }
     .btnFilter {
-        flex-direction: column;   
+        justify-content: center;   
     }
     .btnFunc {
         flex-direction: column;
@@ -101,19 +101,19 @@ body {
 
 .lotoFacil-filter:hover {
     transition: all .4s;
-    background-color: #7F3992;
+    background-color: #7F3992 !important;
     color: #fff;
 }
 
 .megaSena-filter:hover {
     transition: all .4s;
-    background-color: #53AC66;
+    background-color: #53AC66 !important;
     color: #fff;
 }
 
 .quina-filter:hover {
     transition: all .4s;
-    background-color: #EE9B31;
+    background-color: #EE9B31 !important;
     color: #fff;
 }
 
