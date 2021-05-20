@@ -5,3 +5,7 @@
 - Limpar números selecionados.
 - Adicionar os números selecionados ao carrinho.
 - Excluir apostas feitas no carrinho.
+
+### App printscreen
+
+![printscreen app](https://github.com/igorOsantana/lotteryBetting/blob/main/lotteryBetting.png)
