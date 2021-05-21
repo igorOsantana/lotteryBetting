@@ -1,14 +1,10 @@
-(function( doc ) {
+(function( doc, win ) {
     'use strict';
     function app () {
-        var $buttonFilterLotoFacil = doc.querySelector( '[data-js=lotoFacil-filter]' );
-        var $buttonFilterMegaSena = doc.querySelector( '[data-js=megaSena-filter]' );
-        var $buttonFilterQuina = doc.querySelector( '[data-js=quina-filter]' );
         var gameChosen;
         var ajax = new XMLHttpRequest();
         var responseAjaxRules;
 
-        initEvents();
         getRules();
 
         function getRules () {
@@ -17,27 +13,100 @@
             ajax.onreadystatechange = function() {
                 if ( this.readyState === 4 && this.status === 200 ) {
                     responseAjaxRules = JSON.parse( ajax.responseText );
+                    var buttonsFilter = createButtonFilter( responseAjaxRules.types );
+                    addButtonFilterOnPage( buttonsFilter );
                 }
             }
         }
 
+        function createButtonFilter ( jsonGames ) {
+            var fragment = doc.createDocumentFragment();
+            jsonGames.forEach( function( game ) {
+                var $a = doc.createElement( 'a' );
+                $a.setAttribute( 'href', '#' );
+                $a.setAttribute( 'data-js', 'btnFilter' );
+                $a.classList.add( 'btn-filter', 'filters' );
+                $a.style.setProperty( '--btn-filter', game.color );
+                $a.textContent = game.type;
+                fragment.appendChild( $a );
+            });
+            return fragment;
+        }
+
+        function addButtonFilterOnPage ( buttons ) {
+            var $divElementButtonFilter = doc.querySelector( '[data-js=divBtnFilters]' );
+            $divElementButtonFilter.appendChild( buttons );
+            initEvents();
+        }
+
         function initEvents () {
-            $buttonFilterLotoFacil.addEventListener( 'click', setDataGame );
-            $buttonFilterMegaSena.addEventListener( 'click', setDataGame );
-            $buttonFilterQuina.addEventListener( 'click', setDataGame );
+            var $buttonsFilter = doc.querySelectorAll( '[data-js=btnFilter]' );
+            $buttonsFilter.forEach( function( button ) {
+                button.addEventListener( 'click', setDataGame );
+            });
+            $buttonsFilter[0].click();
         }
 
         function setDataGame ( event ) {
+            event.preventDefault();
             gameChosen = event.target.innerText;
             setBetBallsNumbers();
-            setNameOfGameChosen();
-            setDescription();
+            setNameAndDescriptionGameChosen();
             setButtonsFunctions();
             setSelectedButtonFilter( this );
         }
 
+        function setBetBallsNumbers () {
+            var totalNumbers = getTotalNumbersGame( gameChosen );
+            var $gameElement = doc.querySelector( '[data-js=divBetBalls]' );
+            handleBetBalls( $gameElement, totalNumbers );
+            addEventListenerToButtonsBet();
+        }
+
+        function getTotalNumbersGame () {
+            return getGameChosen().range || 0;
+        }
+
+        function handleBetBalls ( divElement, totalNumbers ) {
+            var buttons = createBetBalls( totalNumbers );
+            while ( divElement.hasChildNodes() ) 
+                divElement.removeChild( divElement.lastChild );
+            divElement.appendChild( buttons );
+        }
+
+        function addEventListenerToButtonsBet () {
+            var $buttonsBet = doc.querySelectorAll( '.buttonBet' );
+            $buttonsBet.forEach( function( button ){
+                button.addEventListener( 'click', handleBallsSelected );
+            });
+        }
+
+        function handleBallsSelected ( event ) {
+            var color = getGameChosen().color;
+            var maxNumGame = getGameChosen()['max-number'];
+            var howManyNumSelected = getNumsSelected(); 
+            if ( howManyNumSelected >= maxNumGame ) {
+                if( event.target.classList.contains( 'buttonBetSelected' ) )
+                    event.target.classList.remove( 'buttonBetSelected' );
+                else
+                    win.alert( `Limite máximo de ${ maxNumGame } números atingido!` );
+                return;
+            }
+            event.target.style.setProperty( '--bg-btn-selected', color );
+            event.target.classList.toggle( 'buttonBetSelected' );
+        }
+
+        function setNameAndDescriptionGameChosen () {
+            var nameGame = getGameChosen().type.toUpperCase();
+            var description = getGameChosen().description;
+            var $elementDescription = doc.querySelector( '[data-js=description]' );
+            var $divNameOfGameChosen = doc.querySelector( '[data-js=gameChosen]' );
+            $divNameOfGameChosen.textContent = nameGame ? `FOR ${ nameGame }` : 'SEM JOGO' ;
+            $elementDescription.textContent = description ? description : 'SEM DESCRIÇÃO' ;
+        }
+
         function setSelectedButtonFilter ( button ) {
-            var color = getGameChosen()[0].color;
+            var color = getGameChosen().color;
             var $buttonsFilter = doc.querySelectorAll( '.filters' );
             $buttonsFilter.forEach( function( btn ) {
                 btn.style.backgroundColor = 'inherit';
@@ -48,44 +117,10 @@
         }
 
         function getGameChosen () {
-            return responseAjaxRules.types.filter( function( item ) {
+            var gameChosenData = responseAjaxRules.types.filter( function( item ) {
                 return item.type === gameChosen;
             });
-        }
-
-        function setDescription () {
-            var gameClicked = getGameChosen();
-            var $elementDescription = doc.querySelector( '[data-js=description]' );
-            var description = gameClicked[0].description;
-            $elementDescription.textContent = gameClicked ? description : 'SEM DESCRIÇÃO' ;
-        }
-
-        function setNameOfGameChosen () {
-            var gameClicked = getGameChosen();
-            var nameGame = gameClicked[0].type.toUpperCase();
-            var $divNameOfGameChosen = doc.querySelector( '[data-js=gameChosen]' );
-            $divNameOfGameChosen.textContent = nameGame ? `PARA ${ nameGame }` : 'SEM JOGO' ;
-        }
-
-        function setBetBallsNumbers () {
-            var totalNumbers = getTotalNumbersGame( gameChosen );
-            var $gameElement = doc.querySelector( '[data-js=divBetBalls]' );
-            handleBetBalls( $gameElement, totalNumbers );
-            addEventListenerToButtonsBet();
-        }
-
-        function addEventListenerToButtonsBet () {
-            var $buttonsBet = doc.querySelectorAll( '.buttonBet' );
-            var maxNumGame = getGameChosen()[0]['max-number'];
-            $buttonsBet.forEach( function( button ){
-                button.addEventListener( 'click', function( item ) {
-                    if ( getNumsSelected() >= maxNumGame ) {
-                        item.target.classList.remove( 'buttonBetSelected' );
-                        return;
-                    }
-                    item.target.classList.toggle( 'buttonBetSelected' );
-                });
-            });
+            return gameChosenData[0];
         }
 
         function getNumsSelected () {
@@ -93,15 +128,14 @@
             return $allButtonsSelected.length;
         }
 
-        function handleBetBalls ( divElement, totalNumbers ) {
-            var buttons = createBetBalls( totalNumbers );
-            while ( divElement.hasChildNodes() ) 
-                divElement.removeChild( divElement.lastChild );
-            divElement.appendChild( buttons );
-        }
-
-        function getTotalNumbersGame () {
-            return getGameChosen()[0].range || 0;
+        function setButtonsFunctions() {
+            var $buttonComplete = doc.querySelector( '[data-js=btnComplete]' );
+            var $buttonClear = doc.querySelector( '[data-js=btnClear]' );
+            var $buttonAddCart = doc.querySelector( '[data-js=addCart]' );
+            
+            $buttonComplete.addEventListener( 'click', separateNumSelected );
+            $buttonClear.addEventListener( 'click', clearButtonsSelected );
+            $buttonAddCart.addEventListener( 'click', allNumbersIsSelected );
         }
 
         function createBetBalls ( totalNumbers ) {
@@ -113,16 +147,6 @@
                 fragment.appendChild( $button );
             }
             return fragment;
-        }
-
-        function setButtonsFunctions() {
-            var $buttonComplete = doc.querySelector( '[data-js=btnComplete]' );
-            var $buttonClear = doc.querySelector( '[data-js=btnClear]' );
-            var $buttonAddCart = doc.querySelector( '[data-js=addCart]' );
-            
-            $buttonComplete.addEventListener( 'click', separateNumSelected );
-            $buttonClear.addEventListener( 'click', clearButtonsSelected );
-            $buttonAddCart.addEventListener( 'click', allNumbersIsSelected );
         }
 
         function separateNumSelected () {
@@ -139,16 +163,20 @@
 
         function allNumbersIsSelected () {
             var counterNumSelected = 0;
+            var maxNumbersCanSelect = getMaxNumCanSelect();
             getAllButtonsBet().forEach( function( button ) {
                 if ( button.classList.contains( 'buttonBetSelected' ) ) 
                     ++counterNumSelected;
             });
-            var maxNumbersCanSelect = getMaxNumCanSelect();
-            if ( counterNumSelected === maxNumbersCanSelect ) {
-                getDataToCart();
+            if ( counterNumSelected !== maxNumbersCanSelect ) {
+                win.alert( `Você selecionou apenas ${ counterNumSelected } dos ${ maxNumbersCanSelect } números necessários!` );
                 return;
             }
-            alert( `Você precisa selecionar ${ maxNumbersCanSelect } números!` );
+            var userConfirmed = win.confirm( 'Adicionar os números selecionados?' );
+            if( userConfirmed ) {
+                getDataToCart();
+                clearButtonsSelected();
+            }
         }
 
         function getAllButtonsBet () {
@@ -166,12 +194,12 @@
         }
 
         function getMaxNumCanSelect () {
-            return getGameChosen()[0]['max-number'] || 0;
+            return getGameChosen()['max-number'] || 0;
         };
 
         function getDataToCart () {
             var numbersSelected = getNumbersSelected();
-            var gameData = getGameChosen()[0];
+            var gameData = getGameChosen();
             setDataOnCart( numbersSelected, gameData );
             handleTotalPrice( gameData );
         }
@@ -229,12 +257,12 @@
                     </svg>
                 </a>
                 <div class="d-flex flex-column ps-2 py-1 borderCart" style="border-left: 4px solid ${ color };" >
-                    <p class="grayTitleBold">${ numbers }</p>
+                    <p class="textGrayBold">${ numbers }</p>
                     <div class="d-flex">
                         <p class="fw-bold" style="color:${ color };">
                             ${ game }
                         </p>
-                        <p class="ms-2 gameChosen">${ price }</p>
+                        <p class="ms-2 textGray">${ price }</p>
                     </div>
                 </div>
             </div>`;
@@ -248,7 +276,8 @@
             });
         }
 
-        function deleteElementOnCart () {
+        function deleteElementOnCart ( event ) {
+            event.preventDefault();
             var $divTotalPriceElement = doc.querySelector( '[data-js=totalPrice]' );
             var price = getPriceElementDeleteOnCart( this.parentNode );
             this.parentNode.remove( this.parentNode );
@@ -280,9 +309,9 @@
         function createEmptyCart () {
             var fragment = doc.createDocumentFragment();
             var $p = doc.createElement( 'p' );
-            $p.classList.add( 'gameChosen', 'text-center' );
+            $p.classList.add( 'textGray', 'cartEmpty' );
             $p.setAttribute( 'data-js', 'cartEmpty' );
-            $p.textContent = 'Carrinho vazio';
+            $p.textContent = 'Cart is empty';
             return fragment.appendChild( $p );
         }
 
@@ -310,13 +339,16 @@
         }
 
         function setBallRandonly ( arrayRandomNumbers, allButtonsBet ) {
+            var color = getGameChosen().color;
             allButtonsBet.forEach( function( button ) {
                 arrayRandomNumbers.forEach( function( randomNum ) {
-                    if ( Number( button.innerText ) === randomNum )
+                    if ( Number( button.innerText ) === randomNum ) {
+                        button.style.setProperty( '--bg-btn-selected', color );
                         button.classList.add( 'buttonBetSelected' );
+                    }
                 });
             });
         }
     }
     app();
-})( document );
+})( document, window );

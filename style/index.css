@@ -1,8 +1,22 @@
+:root {
+    --white-color: #fff;
+    --logo-color: #B5C401;
+    --gray-primary: #707070;
+    --gray-secondary : #646262;
+    --bg-color: #e9e9e9;
+    --btn-filter: #000;
+    --bg-btn-ballsBet: #ADC0C4;
+    --bg-btn-selected: #727272;
+    --border-btn-save: #d3d3d3;
+    --border-cart: #E2E2E2;
+}
+
 @media (max-width : 480px) {
     body {
         font-size: 0.5rem;
     }
 }
+
 @media (max-width : 768px) {
     body {
         font-size: 0.75rem;
@@ -35,7 +49,7 @@ p {
 }
 
 body {
-    background-color: #e9e9e9;
+    background-color: var(--bg-color);
 }
 
 .bigFont {
@@ -43,21 +57,21 @@ body {
 }
 
 .borderLogo {
-    border-bottom: 0.5rem solid #B5C401 !important;
+    border-bottom: 0.5rem solid var(--logo-color);
     border-radius: 5px;
 }
 
 .textGray {
-    color: #707070 !important;
+    color: var(--gray-primary);
 }
 
 .textGrayBold {
-    color: #707070 !important;
+    color: var(--gray-secondary) !important;
     font-weight: bold;
 }
 
 .textGraySmall {
-    color: #707070 !important;
+    color: var(--gray-primary);
     font-size: small;
 }
 
@@ -66,12 +80,11 @@ body {
 }
 
 .main-container-left {
-    width: 65%;
+    width: 70%;
 }
 
 .main-container-right {
     width: min-content;
-    height: min-content;
 }
 
 .filters {
@@ -83,49 +96,26 @@ body {
     white-space : nowrap;
 }
 
-.lotoFacil-filter {
-    color: #7F3992;
-    border: 2px solid #7F3992;
+.btn-filter {
+    color: var(--btn-filter);
+    border: 2px solid var(--btn-filter);
 }
 
-.megaSena-filter {
-    color: #53AC66;
-    border: 2px solid #53AC66;
-}
-
-.quina-filter {
-    color: #EE9B31;
-    border: 2px solid #EE9B31;
-
-}
-
-.lotoFacil-filter:hover {
+.btn-filter:hover {
     transition: all .4s;
-    background-color: #7F3992 !important;
-    color: #fff;
-}
-
-.megaSena-filter:hover {
-    transition: all .4s;
-    background-color: #53AC66 !important;
-    color: #fff;
-}
-
-.quina-filter:hover {
-    transition: all .4s;
-    background-color: #EE9B31 !important;
-    color: #fff;
+    background-color: var(--btn-filter) !important;
+    color: var(--white-color);
 }
 
 .buttonBet {
     font-size: small;
-    color: #fff;
-    background-color: #ADC0C4;
-    border: 1px solid #ADC0C4;
+    color: var(--white-color);
+    background-color: var(--bg-btn-ballsBet);
+    border: 1px solid var(--bg-btn-ballsBet);
     border-radius: 50%;
     width: 2rem;
     height: 2rem;
-    padding: 0.5rem 0rem;
+    padding: 0.5rem 0.1rem 0.4rem 0rem;
     margin: 0.3rem;
 }
 
@@ -134,12 +124,9 @@ body {
     opacity: .6;
 }
 
-.buttonBet:active {
-    border: 1px solid #889092;
-}
-
 .buttonBetSelected {
-    background-color: #000;
+    background-color: var(--bg-btn-selected);
+    font-weight: bold;
 }
 
 .buttonsFunc {
@@ -147,8 +134,7 @@ body {
 }
 
 .btnSave {
-    background-color: #e9e9e9;
-    border: 1px solid #d3d3d3;
+    border: 1px solid var(--border-btn-save);
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 }
@@ -158,9 +144,13 @@ body {
     opacity: .6;
 }
 
+.cartEmpty {
+    text-align: center;
+}
+
 .cart {
-    background-color: #fff;
-    border: 1px solid #E2E2E2;
+    background-color: var(--white-color);
+    border: 1px solid var(--border-cart);
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
 }
@@ -170,5 +160,8 @@ body {
 }
 
 .cartBody {
-    font-size: small;
+    height: min-content;
+    max-height: 10rem;
+    font-size: small !important;
+    overflow-y: auto;
 }
