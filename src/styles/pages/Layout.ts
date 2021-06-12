@@ -10,12 +10,13 @@ export const Container = styled.main`
   overflow: hidden;
 `;
 
-export const SectionLogo = styled.section`
-  width: 18rem;
-  height: 25rem;
+export const LeftSection = styled.section`
+  background-color: green;
+  width: 45%;
+  height: 65%;
 `;
 
-export const SectionForm = styled.section`
-  width: 18rem;
-  height: 25rem;
+export const RightSection = styled.section`
+  width: 25%;
+  height: 65%;
 `;

@@ -9,6 +9,9 @@ export const Container = styled.div`
     color: ${props => props.theme.grayLight};
     font-size: 2rem;
   }
+  button {
+    margin: 2rem auto;
+  }
 `;
 
 export const Form = styled.form`
@@ -55,8 +58,5 @@ export const Form = styled.form`
     &:hover {
       color: ${({ theme }) => theme.grayWhite};
     }
-  }
-  button {
-    margin: 2rem auto;
   }
 `;

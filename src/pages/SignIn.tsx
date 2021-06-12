@@ -5,17 +5,17 @@ import Registration from '../components/SignIn/Registration';
 import ForgetPassword from '../components/SignIn/ForgetPassword';
 import {
   Container,
-  SectionLogo,
-  SectionForm,
-} from '../styles/pages/SignInStyled';
+  LeftSection,
+  RightSection,
+} from '../styles/pages/Layout';
 
 const SignInPage: React.FC = () => {
   return (
     <Container>
-      <SectionLogo>
+      <LeftSection>
         <LogoBrand />
-      </SectionLogo>
-      <SectionForm>
+      </LeftSection>
+      <RightSection>
         <Route exact path='/sign'>
           <Authentication />
         </Route>
@@ -25,7 +25,7 @@ const SignInPage: React.FC = () => {
         <Route exact path='/sign/reset-password'>
           <ForgetPassword />
         </Route>
-      </SectionForm>
+      </RightSection>
     </Container>
   );
 };

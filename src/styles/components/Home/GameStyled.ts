@@ -5,6 +5,7 @@ export const Container = styled.section`
   flex-wrap: nowrap;
   margin-bottom: 2rem;
   font-size: 1.25rem;
+  height: 5rem;
 `;
 
 export const BorderColor = styled.div`
