@@ -5,10 +5,9 @@ interface InputProps {
   name: string;
   type: string;
   placeholder: string;
-  autoFocus?: boolean;
 }
 
-const InputWithValidation: React.FC<InputProps> = props => {
+const InputWithValidation: React.FC<InputProps> = (props) => {
   const [, meta] = useField(props);
 
   return (

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../UI/Button/ButtonArrow';
@@ -14,11 +14,12 @@ interface AuthProps {
   password: string;
 }
 
+export const validationYup = Yup.object({
+  email: Yup.string().email('Email inválido.').required('Email obrigatório.'),
+});
+
 const Authentication: React.FC = () => {
   const INITIAL_VALUES: AuthProps = { email: '', password: '' };
-  const validationYup = Yup.object({
-    email: Yup.string().email('Email inválido.').required('Email obrigatório.'),
-  });
 
   const submitHandler = (
     values: AuthProps,
@@ -39,12 +40,7 @@ const Authentication: React.FC = () => {
       >
         <Form>
           <ContentForm>
-            <InputWithValidation
-              name='email'
-              type='text'
-              placeholder='Email'
-              autoFocus={true}
-            />
+            <InputWithValidation name='email' type='text' placeholder='Email' />
             <InputWithValidation
               name='password'
               type='password'
