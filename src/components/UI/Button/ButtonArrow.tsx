@@ -4,6 +4,7 @@ import { Button } from '../../../styles/components/UI/Button/ButtonArrowStyled';
 
 interface Props {
   onClick?: () => void;
+  isSubmit?: boolean;
   className?: string;
   width?: string;
   height?: string;
@@ -14,7 +15,7 @@ interface Props {
 
 const ButtonArrow: React.FC<Props> = props => {
   return (
-    <Button {...props}>
+    <Button type={props.isSubmit ? 'submit' : 'button'} {...props}>
       {props.arrow === 'left' && <ArrowBackIcon />}
       &nbsp;{props.children}&nbsp;
       {props.arrow === 'right' && <ArrowForwardIcon />}

@@ -1,4 +1,5 @@
 import { Route } from 'react-router-dom';
+
 import Authentication from '../components/SignIn/Authentication';
 import LogoBrand from '../components/SignIn/LogoBrand';
 import Registration from '../components/SignIn/Registration';
@@ -7,12 +8,12 @@ import {
   Container,
   LeftSection,
   RightSection,
-} from '../styles/pages/Layout';
+} from '../styles/pages/LayoutStyled';
 
 const SignInPage: React.FC = () => {
   return (
-    <Container>
-      <LeftSection>
+    <Container page='sign'>
+      <LeftSection page='sign'>
         <LogoBrand />
       </LeftSection>
       <RightSection>

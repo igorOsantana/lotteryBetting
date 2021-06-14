@@ -32,7 +32,7 @@ const Navbar: React.FC = props => {
             )}
             <li>Account</li>
             <li>
-              Sair&nbsp;
+              Log&nbsp;out&nbsp;
               <ArrowForward fontSize='small' />
             </li>
           </NavList>

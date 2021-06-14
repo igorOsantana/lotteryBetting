@@ -4,8 +4,7 @@ export const Button = styled.button`
   color: ${({ color, theme }) => (color ? color : theme.greenLogo)};
   background: initial;
   width: min-content;
-  height: 2rem;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 1rem;
   margin-right: 1rem;
   border: 2px solid ${({ color, theme }) => (color ? color : theme.greenLogo)};
   border-radius: 15px;

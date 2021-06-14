@@ -14,19 +14,20 @@ export const Container = styled.div`
   }
 `;
 
-export const Form = styled.form`
+export const ContentForm = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 18rem;
   border: 1px solid ${props => props.theme.borderLight};
   border-radius: 10px;
   box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.1);
   margin: 1rem;
+  padding: 0.3rem 0;
   background-color: ${props => props.theme.white};
 
-  input {
+  /* input {
     align-self: stretch;
     margin-top: 0.5rem;
     height: 2.5rem;
@@ -45,7 +46,7 @@ export const Form = styled.form`
     &::placeholder {
       font-weight: bold;
     }
-  }
+  } */
   a {
     font-family: sans-serif;
     align-self: flex-end;

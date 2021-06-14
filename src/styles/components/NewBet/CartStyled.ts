@@ -14,20 +14,29 @@ export const Container = styled.section`
 
 export const Title = styled.h1`
   color: ${({ theme }) => theme.grayLight};
-  font-size: 2rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 `;
 
 export const Content = styled.div`
-  padding: 1rem 0.5rem;
+  padding: 1rem 0;
   flex: 1;
   height: 10rem;
   overflow-y: auto;
 `;
 
-export const Item = styled.div``;
-
 export const TotalPrice = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
   font-size: 1.5rem;
+  margin-top: 0.5rem;
+  color: ${({ theme }) => theme.grayWhite};
+
+  span {
+    font-weight: bold;
+    color: ${({ theme }) => theme.grayLight};
+    margin-right: 5px;
+  }
 `;
 
 export const ButtoSaveContainer = styled.div`

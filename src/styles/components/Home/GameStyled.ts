@@ -10,7 +10,7 @@ export const Container = styled.section`
 
 export const BorderColor = styled.div`
   height: 100%;
-  width: 0.5rem;
+  width: 0.3rem;
   margin-right: 1rem;
   border: 1px solid purple;
   border-radius: 10px;

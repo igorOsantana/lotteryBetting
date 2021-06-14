@@ -19,6 +19,7 @@ export const Content = styled.div`
   align-items: center;
   width: 70%;
   height: 100%;
+  font-weight: bold;
   color: ${({ theme }) => theme.grayLight};
 `;
 
