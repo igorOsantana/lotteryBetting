@@ -1,18 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Formik, Form, FormikHelpers } from 'formik';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
+import { useAppDispatch, RootState } from '../../store';
+import { logIn, AuthProps } from '../../store/slices/userReducer';
 import Button from '../UI/Button/ButtonArrow';
+import InputWithValidation from '../UI/Input/InputWithValidation';
 import {
   Container,
   ContentForm,
 } from '../../styles/components/SignIn/LayoutStyled';
-import InputWithValidation from '../UI/Input/InputWithValidation';
-
-interface AuthProps {
-  email: string;
-  password: string;
-}
 
 export const validationYup = Yup.object({
   email: Yup.string().email('Email inválido.').required('Email obrigatório.'),
@@ -20,13 +18,14 @@ export const validationYup = Yup.object({
 
 const Authentication: React.FC = () => {
   const INITIAL_VALUES: AuthProps = { email: '', password: '' };
+  const dispatch = useAppDispatch();
+  const isLogged = useSelector((state: RootState) => state.user.isLogged);
 
   const submitHandler = (
     values: AuthProps,
     { setSubmitting }: FormikHelpers<AuthProps>
   ) => {
-    const { email, password } = values;
-    alert(`email = ${email}\n senha = ${password}`);
+    dispatch(logIn(values));
     setSubmitting(false);
   };
 
@@ -56,6 +55,7 @@ const Authentication: React.FC = () => {
       <Button color={'gray'} arrow='right'>
         <Link to='/sign/registration'>Sign Up</Link>
       </Button>
+      {isLogged && <Redirect to='/' />}
     </Container>
   );
 };

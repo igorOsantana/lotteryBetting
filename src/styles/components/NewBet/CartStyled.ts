@@ -19,10 +19,19 @@ export const Title = styled.h1`
 `;
 
 export const Content = styled.div`
+  position: relative;
   padding: 1rem 0;
   flex: 1;
   height: 10rem;
   overflow-y: auto;
+
+  p {
+    color: ${({ theme }) => theme.grayLight};
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 `;
 
 export const TotalPrice = styled.div`

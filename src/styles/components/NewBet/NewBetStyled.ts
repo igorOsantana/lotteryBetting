@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface SelectedProps {
+  color: string;
+}
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,10 +52,14 @@ export const Description = styled.div`
   }
 `;
 
-export const BallsContainer = styled.div`
+export const BallsContainer = styled.div<SelectedProps>`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 1rem;
+
+  .selected {
+    background-color: ${({ color }) => color};
+  }
 `;
 
 export const ButtonsContainer = styled.div`

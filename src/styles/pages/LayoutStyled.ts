@@ -11,7 +11,6 @@ export const Container = styled.main<Props>`
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
 `;
 
 export const LeftSection = styled.section<Props>`

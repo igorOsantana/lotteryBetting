@@ -12,9 +12,9 @@ export const BorderColor = styled.div`
   height: 100%;
   width: 0.3rem;
   margin-right: 1rem;
-  border: 1px solid purple;
+  border: 1px solid ${({ color }) => color};
   border-radius: 10px;
-  background-color: purple;
+  background-color: ${({ color }) => color};
 `;
 
 export const Content = styled.div`
@@ -33,7 +33,7 @@ export const Content = styled.div`
     font-size: small;
   }
   & :nth-child(3) {
-    color: purple;
+    color: ${({ color }) => color};
     font-weight: 900;
   }
 `;

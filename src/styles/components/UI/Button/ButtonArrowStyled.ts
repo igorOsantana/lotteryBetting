@@ -18,7 +18,7 @@ export const Button = styled.button<ButtonProps>`
   transition: all 0.3s;
   width: ${({ width }) => (width ? width : null)};
   height: ${({ height }) => (height ? height : null)};
-  color: ${({ color, theme }) => (color ? theme.grayLight : theme.greenLogo)};
+  color: ${({ color, theme }) => (color ? color : theme.greenLogo)};
 
   &:hover {
     transform: scale(1.05);

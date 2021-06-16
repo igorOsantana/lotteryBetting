@@ -9,16 +9,23 @@ import {
   Logo,
   NavList,
 } from '../../../styles/components/UI/Navbar/NavbarStyled';
+import { useAppDispatch } from '../../../store';
+import { logOut } from '../../../store/slices/userReducer';
 
 const Navbar: React.FC = props => {
   const [showHomeLink, setShowHomeLink] = useState(false);
-  const { pathname } = useLocation();
-  const currentUrl = pathname;
+  const currentUrl = useLocation().pathname;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (currentUrl === '/new-bet') setShowHomeLink(true);
     else setShowHomeLink(false);
   }, [currentUrl]);
+
+  const logOutHandler = () => {
+    dispatch(logOut());
+  };
+
   return (
     <>
       <Container>
@@ -31,7 +38,7 @@ const Navbar: React.FC = props => {
               </li>
             )}
             <li>Account</li>
-            <li>
+            <li onClick={logOutHandler}>
               Log&nbsp;out&nbsp;
               <ArrowForward fontSize='small' />
             </li>

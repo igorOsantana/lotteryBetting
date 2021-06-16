@@ -9,16 +9,16 @@ import {
   ContentForm,
 } from '../../styles/components/SignIn/LayoutStyled';
 
-interface ForgetPassword {
+interface ForgetPasswordProps {
   email: string;
 }
 
 const ForgetPassword: React.FC = () => {
-  const INITIAL_VALUES: ForgetPassword = { email: '' };
+  const INITIAL_VALUES: ForgetPasswordProps = { email: '' };
 
   const submitHandler = (
-    values: ForgetPassword,
-    { setSubmitting }: FormikHelpers<ForgetPassword>
+    values: ForgetPasswordProps,
+    { setSubmitting }: FormikHelpers<ForgetPasswordProps>
   ) => {
     const { email } = values;
     alert(`email = ${email}`);

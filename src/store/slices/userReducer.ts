@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const USERS = [
   { email: 'igorsantana@gmail.com', password: 'igorigor' },
@@ -6,14 +6,28 @@ const USERS = [
   { email: 'isabelarocha@gmail.com', password: 'isaisa' },
 ];
 
+export interface AuthProps {
+  email: string;
+  password: string;
+}
+
+interface UserSliceProps {
+  isLogged: boolean;
+  credencials: AuthProps[];
+}
+
+const initialState: UserSliceProps = {
+  isLogged: false,
+  credencials: USERS,
+};
+
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    isLogged: false,
-  },
+  initialState,
   reducers: {
-    logIn: state => {
-      state.isLogged = true;
+    logIn: (state, { payload }: PayloadAction<AuthProps>) => {
+      const account = USERS.filter(user => user.email === payload.email);
+      if (account[0].password === payload.password) state.isLogged = true;
     },
     logOut: state => {
       state.isLogged = false;
@@ -21,6 +35,6 @@ const userSlice = createSlice({
   },
 });
 
-export const userActions = userSlice.actions;
+export const { logIn, logOut } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -7,38 +7,58 @@ import {
   TotalPrice,
   ButtoSaveContainer,
 } from '../../styles/components/NewBet/CartStyled';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../../store';
+import { saveBet } from '../../store/slices/betReducer';
 
 const Cart: React.FC = () => {
-  const numbers = [
-    1, 2, 3, 4, 5, 6, 7, 10, 23, 56, 78, 41, 57, 79, 34, 12, 56,
-  ].join(', ');
+  const items = useSelector((state: RootState) => state.bet.cartBets);
+  const totalPrice = useSelector((state: RootState) => state.bet.totalPrice);
+  const { color } = useSelector((state: RootState) => state.game.game);
+  const dispatch = useAppDispatch();
+  let contentCart;
+
+  const saveBetHandler = () => {
+    dispatch(saveBet(items));
+  };
+
+  const convertToBRL = (num: number) =>
+    num.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+
+  if (items.length === 0) {
+    contentCart = <p>Empty cart</p>;
+  } else {
+    contentCart = items.map(item => (
+      <Item
+        key={item.id}
+        id={item.id}
+        color={item.color}
+        numbers={item.balls.join(', ')}
+        game={item.type}
+        price={item.price}
+        date={item.date}
+        convert={convertToBRL}
+      />
+    ));
+  }
+
   return (
     <>
       <Container>
         <Title>CART</Title>
-        <Content>
-          <Item
-            color='purple'
-            numbers={numbers}
-            game='Lotofácil'
-            price='R$3,00'
-          />
-          <Item
-            color='green'
-            numbers={numbers}
-            game='Lotomania'
-            price='R$5,50'
-          />
-          <Item color='red' numbers={numbers} game='Quina' price='R$2,50' />
-          <Item color='blue' numbers={numbers} game='Federal' price='R$4,00' />
-        </Content>
+        <Content>{contentCart}</Content>
         <TotalPrice>
           <span>CART</span>
-          <p>TOTAL: R$7,00</p>
+          <p>TOTAL: {convertToBRL(totalPrice)}</p>
         </TotalPrice>
       </Container>
       <ButtoSaveContainer>
-        <Button arrow='right'>Save</Button>
+        <Button onClick={saveBetHandler} color={color} arrow='right'>
+          Save
+        </Button>
       </ButtoSaveContainer>
     </>
   );

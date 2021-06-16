@@ -1,8 +1,13 @@
 import styled from 'styled-components';
 
-export const Button = styled.button`
-  color: ${({ color, theme }) => (color ? color : theme.greenLogo)};
-  background: initial;
+interface ButtonFilterProps {
+  color?: string;
+  selected?: boolean;
+}
+
+export const Button = styled.button<ButtonFilterProps>`
+  color: ${({ color, selected }) => (selected ? '#fff' : color)};
+  background: ${({ selected, color }) => (selected ? color : 'initial')};
   width: min-content;
   padding: 0.3rem 1rem;
   margin-right: 1rem;

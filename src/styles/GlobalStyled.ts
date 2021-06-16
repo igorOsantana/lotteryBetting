@@ -36,7 +36,7 @@ export default createGlobalStyle`
     background-color: #F7F7F7;
     font-family: Source Sans Pro, sans-serif;
     font-style: italic;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   button {

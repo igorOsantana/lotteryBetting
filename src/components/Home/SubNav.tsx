@@ -2,15 +2,54 @@ import ButtonFilter from '../UI/Button/ButtonFilter';
 import ButtonNewBet from '../UI/Button/ButtonArrow';
 import { Link } from 'react-router-dom';
 import { Container } from '../../styles/components/Home/SubnavStyled';
+import { Bet } from '../../store/slices/betReducer';
 
-const SubNav: React.FC = () => {
+interface SubnavProps {
+  games: Bet[];
+}
+
+interface FilterProps {
+  type: string;
+  color: string;
+  id: number;
+}
+
+const SubNav: React.FC<SubnavProps> = ({ games }) => {
+  let contentFilter;
+  let types: FilterProps[] = [];
+
+  const getTypesToBeFilter = () => {
+    games.forEach(game =>
+      types.push({ type: game.type, color: game.color, id: game.id })
+    );
+    let clearDuplicateValues = new Map();
+    types.forEach(type => {
+      if (!clearDuplicateValues.has(type.type))
+        clearDuplicateValues.set(type.type, type);
+    });
+    types = Array.from(clearDuplicateValues.values());
+  };
+
+  const setTypesToBeFilter = () => {
+    contentFilter = types.map(type => (
+      <ButtonFilter key={type.id} color={type.color}>
+        {type.type}
+      </ButtonFilter>
+    ));
+  };
+
+  if (games.length === 0) {
+    contentFilter = null;
+  } else {
+    getTypesToBeFilter();
+    setTypesToBeFilter();
+  }
+
   return (
     <Container>
       <h2>RECENT GAMES</h2>
-      <span>Filters</span>
-      <ButtonFilter color='#7F3992'>Lotofácil</ButtonFilter>
-      <ButtonFilter color='#53AC66'>Mega-Sena</ButtonFilter>
-      <ButtonFilter color='#EE9B31'>Lotomania</ButtonFilter>
+      {!!contentFilter && <span>Filters</span>}
+      {contentFilter}
       <ButtonNewBet className='test' fontSize='1.25rem' arrow='right'>
         <Link to='new-bet'>New Bet</Link>
       </ButtonNewBet>

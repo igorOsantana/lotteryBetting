@@ -4,19 +4,30 @@ import {
   BorderColor,
 } from '../../styles/components/Home/GameStyled';
 
-const Game: React.FC = () => {
-  const numbers = [1, 4, 6, 8, 21, 43, 55, 72, 78, 85, 90].join(', ');
-  const date = '30/10/2021';
-  const price = 'R$ 2,50';
+interface GameProps {
+  type: string;
+  numbers: number[];
+  date: string;
+  price: number;
+  color: string;
+}
+
+const Game: React.FC<GameProps> = props => {
+  const convertToBRL = (num: number) =>
+    num.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+
   return (
     <Container>
-      <BorderColor />
-      <Content>
-        <div>{numbers}</div>
+      <BorderColor color={props.color} />
+      <Content color={props.color}>
+        <div>{props.numbers.join(', ')}</div>
         <div>
-          {date} - ({price})
+          {props.date} - ({convertToBRL(props.price)})
         </div>
-        <div>Lotofácil</div>
+        <div>{props.type}</div>
       </Content>
     </Container>
   );

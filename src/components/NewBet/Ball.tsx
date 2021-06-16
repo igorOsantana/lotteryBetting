@@ -1,6 +1,10 @@
 import { Button } from '../../styles/components/NewBet/BallStyled';
 
-const Ball: React.FC = props => {
+interface ButtonProps {
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const Ball: React.FC<ButtonProps> = props => {
   return <Button {...props}>{props.children}</Button>;
 };
 

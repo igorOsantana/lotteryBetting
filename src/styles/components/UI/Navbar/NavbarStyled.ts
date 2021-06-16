@@ -54,5 +54,8 @@ export const NavList = styled.ul<NavListProps>`
     &:hover {
       filter: brightness(150%);
     }
+    &:active {
+      color: ${({ theme }) => theme.greenLogo};
+    }
   }
 `;
