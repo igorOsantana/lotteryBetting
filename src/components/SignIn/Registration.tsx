@@ -22,8 +22,7 @@ const Registration: React.FC = () => {
     values: RegisterProps,
     { setSubmitting }: FormikHelpers<RegisterProps>
   ) => {
-    const { email, password } = values;
-    alert(`email = ${email}\n senha = ${password}`);
+    alert(JSON.stringify(values));
     setSubmitting(false);
   };
   return (

@@ -8,6 +8,7 @@ export const Button = styled.button<Props>`
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
+  white-space: nowrap;
   background: transparent;
   color: ${({ color }) => (color ? color : 'green')};
   border: 1px solid ${({ color }) => (color ? color : 'green')};

@@ -1,12 +1,10 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 
-import userReducer from './slices/userReducer';
 import betReducer from './slices/betReducer';
-import gameReducer from './slices/gameReducer';
 
 const store = configureStore({
-  reducer: { user: userReducer, bet: betReducer, game: gameReducer },
+  reducer: { bet: betReducer },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -9,13 +9,13 @@ import {
   Logo,
   NavList,
 } from '../../../styles/components/UI/Navbar/NavbarStyled';
-import { useAppDispatch } from '../../../store';
-import { logOut } from '../../../store/slices/userReducer';
+import { useContext } from 'react';
+import { AuthContext } from '../../../context/Auth/AuthContext';
 
 const Navbar: React.FC = props => {
   const [showHomeLink, setShowHomeLink] = useState(false);
   const currentUrl = useLocation().pathname;
-  const dispatch = useAppDispatch();
+  const { signOut } = useContext(AuthContext);
 
   useEffect(() => {
     if (currentUrl === '/new-bet') setShowHomeLink(true);
@@ -23,7 +23,7 @@ const Navbar: React.FC = props => {
   }, [currentUrl]);
 
   const logOutHandler = () => {
-    dispatch(logOut());
+    signOut();
   };
 
   return (

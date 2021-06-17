@@ -20,8 +20,7 @@ const ForgetPassword: React.FC = () => {
     values: ForgetPasswordProps,
     { setSubmitting }: FormikHelpers<ForgetPasswordProps>
   ) => {
-    const { email } = values;
-    alert(`email = ${email}`);
+    alert(JSON.stringify(values));
     setSubmitting(false);
   };
   return (

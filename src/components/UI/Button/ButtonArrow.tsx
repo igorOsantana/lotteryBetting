@@ -11,9 +11,10 @@ interface Props {
   color?: string;
   fontSize?: string;
   arrow?: string;
+  disabled?: boolean;
 }
 
-const ButtonArrow: React.FC<Props> = (props) => {
+const ButtonArrow: React.FC<Props> = props => {
   return (
     <Button type={props.isSubmit ? 'submit' : 'button'} {...props}>
       {props.arrow === 'left' && <ArrowBackIcon />}

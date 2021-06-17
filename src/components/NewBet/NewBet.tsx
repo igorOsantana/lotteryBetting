@@ -1,13 +1,9 @@
+import { useContext } from 'react';
 import RULES from '../../games.json';
-
-import { useAppDispatch, RootState } from '../../store';
-import {
-  selectGame,
-  selectBall,
-  updateBalls,
-  clearBalls,
-} from '../../store/slices/gameReducer';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+
+import { Bet, CartContext } from '../../context/Cart/CartContext';
+import { showNotificationError } from '../../notifications';
 import ButtonNewBet from '../UI/Button/ButtonNewBet';
 import ButtonFilter from '../UI/Button/ButtonFilter';
 import Ball from './Ball';
@@ -19,16 +15,21 @@ import {
   BallsContainer,
   ButtonsContainer,
 } from '../../styles/components/NewBet/NewBetStyled';
-import { useSelector } from 'react-redux';
-import { Bet, setNewBet } from '../../store/slices/betReducer';
 
 const NewBet: React.FC = () => {
   const { types } = RULES;
-  const dispatch = useAppDispatch();
 
-  const game = useSelector((state: RootState) => state.game.game);
-  const ballsSelected = useSelector((state: RootState) => state.game.balls);
-  const bets = useSelector((state: RootState) => state.bet.cartBets);
+  const {
+    game,
+    selectedBalls,
+    bets,
+    selectGame,
+    selectBall,
+    clearBalls,
+    updateBalls,
+    addNewBet,
+  } = useContext(CartContext);
+
   let balls: JSX.Element[] = [];
 
   const filterHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,33 +40,35 @@ const NewBet: React.FC = () => {
 
   const selectGameHandler = (typeClicked: string | null) => {
     const gameSelected = types.filter(game => game.type === typeClicked)[0];
-    dispatch(selectGame(gameSelected));
+    selectGame(gameSelected);
   };
 
   const clearBallsSelected = () => {
     const ballsSelected = document.querySelectorAll('.selected');
     ballsSelected.forEach(ball => ball.classList.remove('selected'));
-    dispatch(clearBalls());
+    clearBalls();
   };
 
   const getNumberOfBall = (event: React.MouseEvent<HTMLButtonElement>) => {
     const ballClicked = Number(event.currentTarget.textContent);
-    if (ballsSelected.some(ball => ball === ballClicked)) {
-      const ballsUpdated = ballsSelected.filter(ball => ball !== ballClicked);
-      dispatch(updateBalls(ballsUpdated));
+    if (selectedBalls.some(ball => ball === ballClicked)) {
+      const ballsUpdated = selectedBalls.filter(ball => ball !== ballClicked);
+      updateBalls(ballsUpdated);
       event.currentTarget.classList.toggle('selected');
-    } else if (ballsSelected.length < game['max-number']) {
-      dispatch(selectBall(ballClicked));
+    } else if (selectedBalls.length < game['max-number']) {
+      selectBall(ballClicked);
       event.currentTarget.classList.toggle('selected');
     } else {
-      alert('Você atingiu o limite de números.');
+      showNotificationError(
+        `Esse jogo aceita apenas ${game['max-number']} números.`
+      );
     }
   };
 
   const completeGameHandler = () => {
     const allBalls = document.querySelectorAll('[data-js=betBall]');
     const maxNumbersCanSelect = game['max-number'];
-    const difBetween = maxNumbersCanSelect - ballsSelected.length;
+    const difBetween = maxNumbersCanSelect - selectedBalls.length;
     const arrayRandomNumbers = getNumbersRandonly(difBetween);
     setBallRandonly(arrayRandomNumbers, allBalls);
   };
@@ -74,7 +77,7 @@ const NewBet: React.FC = () => {
     let arrayRandomNumbers: number[] = [];
     while (arrayRandomNumbers.length < difBetween) {
       let randomNum = Math.floor(Math.random() * game.range + 1);
-      let hasThatRandomNumber = ballsSelected.some(ball => ball === randomNum);
+      let hasThatRandomNumber = selectedBalls.some(ball => ball === randomNum);
       if (hasThatRandomNumber === false) arrayRandomNumbers.push(randomNum);
       let clearDuplicateNumber = new Set(arrayRandomNumbers);
       arrayRandomNumbers = Array.from(clearDuplicateNumber);
@@ -90,27 +93,41 @@ const NewBet: React.FC = () => {
       arrayRandomNum.forEach(num => {
         if (Number(ball.textContent) === num) {
           ball.classList.add('selected');
-          dispatch(selectBall(num));
+          selectBall(num);
         }
       });
     });
   };
 
   const addToCart = () => {
+    if (hasEnoughNumbers() === false) return;
     const newBet = {
       id: new Date().getTime() + Math.random(),
       type: game.type,
-      balls: ballsSelected,
+      balls: selectedBalls,
       price: game.price,
       color: game.color,
       date: new Date().toLocaleDateString(),
     };
     if (alreadyHasThatBet(newBet) === false) {
-      dispatch(setNewBet(newBet));
+      addNewBet(newBet);
       clearBallsSelected();
     } else {
-      alert('Você já fez uma aposta com esses dados.');
+      showNotificationError('Você já fez uma aposta com esses números.');
     }
+  };
+
+  const hasEnoughNumbers = () => {
+    const isValid = selectedBalls.length === game['max-number'];
+
+    if (isValid === false) {
+      const howManyNumRemaining = game['max-number'] - selectedBalls.length;
+      let stringNum = howManyNumRemaining === 1 ? 'número' : 'números';
+      showNotificationError(
+        `Você precisa adicionar mais ${howManyNumRemaining} ${stringNum}. Você selecionou ${selectedBalls.length} em um total de ${game['max-number']}.`
+      );
+      return false;
+    } else if (isValid) return true;
   };
 
   const alreadyHasThatBet = (newBet: Bet) => {

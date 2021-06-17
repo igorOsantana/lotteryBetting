@@ -8,7 +8,7 @@ import {
   Container,
   LeftSection,
   RightSection,
-} from '../styles/pages/LayoutStyled';
+} from '../styles/pages/LayoutPagesStyled';
 
 const SignInPage: React.FC = () => {
   return (
@@ -16,7 +16,7 @@ const SignInPage: React.FC = () => {
       <LeftSection page='sign'>
         <LogoBrand />
       </LeftSection>
-      <RightSection>
+      <RightSection page='sign'>
         <Route exact path='/sign'>
           <Authentication />
         </Route>

@@ -20,7 +20,7 @@ export const Button = styled.button<ButtonProps>`
   height: ${({ height }) => (height ? height : null)};
   color: ${({ color, theme }) => (color ? color : theme.greenLogo)};
 
-  &:hover {
-    transform: scale(1.05);
+  &:hover:enabled {
+    filter: brightness(75%);
   }
 `;

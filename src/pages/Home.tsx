@@ -1,12 +1,16 @@
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { RootState } from '../store';
 import Navbar from '../components/UI/Navbar/Navbar';
 import SubNav from '../components/Home/SubNav';
 import ContentGames from '../components/Home/ContentGames';
 import Game from '../components/Home/Game';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
 
 const HomePage: React.FC = () => {
   const gamesSaved = useSelector((state: RootState) => state.bet.savedBets);
+  const [contentGameFilter, setContentGameFilter] = useState<JSX.Element[]>([]);
+  const [filterSelected, setFilterSelected] = useState<string>('');
   let contentGame;
 
   if (gamesSaved.length === 0) {
@@ -24,10 +28,35 @@ const HomePage: React.FC = () => {
     ));
   }
 
+  const filterGame = (type: string) => {
+    setFilterSelected(currentType => (currentType === type ? '' : type));
+    const filteredGame = gamesSaved.filter(game => game.type === type);
+    setContentGameFilter(
+      filteredGame.map(game => (
+        <Game
+          key={game.id}
+          type={game.type}
+          numbers={game.balls}
+          date={game.date}
+          price={game.price}
+          color={game.color}
+        />
+      ))
+    );
+  };
+
   return (
     <Navbar>
-      <SubNav games={gamesSaved} />
-      <ContentGames>{contentGame}</ContentGames>
+      <SubNav
+        typeClicked={filterSelected}
+        onFilterGame={filterGame}
+        games={gamesSaved}
+      />
+      <ContentGames>
+        {contentGameFilter.length === 0 || filterSelected === ''
+          ? contentGame
+          : contentGameFilter}
+      </ContentGames>
     </Navbar>
   );
 };

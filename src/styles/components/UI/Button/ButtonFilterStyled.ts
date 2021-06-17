@@ -10,7 +10,7 @@ export const Button = styled.button<ButtonFilterProps>`
   background: ${({ selected, color }) => (selected ? color : 'initial')};
   width: min-content;
   padding: 0.3rem 1rem;
-  margin-right: 1rem;
+  margin: 0.5rem 1rem 0.5rem 0;
   border: 2px solid ${({ color, theme }) => (color ? color : theme.greenLogo)};
   border-radius: 15px;
   font-weight: 900;

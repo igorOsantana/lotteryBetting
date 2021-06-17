@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.nav`
+  position: relative;
   display: flex;
   align-items: center;
   margin: 3.5rem auto;
   height: 2rem;
   width: 70%;
+
+  @media (max-width: 720px) {
+    flex-direction: column;
+  }
 
   h2 {
     color: ${({ theme }) => theme.grayLight};
@@ -18,5 +23,10 @@ export const Container = styled.nav`
   }
   button:last-child {
     margin-left: auto;
+
+    @media (max-width: 720px) {
+      position: absolute;
+      right: 0;
+    }
   }
 `;

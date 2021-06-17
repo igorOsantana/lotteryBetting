@@ -5,7 +5,6 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  height: 80%;
   padding: 1rem;
   border: 1px solid ${({ theme }) => theme.borderLight};
   border-top-left-radius: 5px;
@@ -21,9 +20,10 @@ export const Title = styled.h1`
 export const Content = styled.div`
   position: relative;
   padding: 1rem 0;
+  max-height: 15rem;
   flex: 1;
-  height: 10rem;
   overflow-y: auto;
+  overflow-x: hidden;
 
   p {
     color: ${({ theme }) => theme.grayLight};

@@ -1,3 +1,13 @@
+import { useContext } from 'react';
+import { useAppDispatch } from '../../store';
+import { saveBet } from '../../store/slices/betReducer';
+import { toast } from 'react-toastify';
+import { CartContext } from '../../context/Cart/CartContext';
+
+import {
+  showNotificationSucess,
+  showNotificationError,
+} from '../../notifications';
 import Button from '../UI/Button/ButtonArrow';
 import Item from '../NewBet/CartItem';
 import {
@@ -7,19 +17,30 @@ import {
   TotalPrice,
   ButtoSaveContainer,
 } from '../../styles/components/NewBet/CartStyled';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../../store';
-import { saveBet } from '../../store/slices/betReducer';
+import { useHistory } from 'react-router-dom';
 
 const Cart: React.FC = () => {
-  const items = useSelector((state: RootState) => state.bet.cartBets);
-  const totalPrice = useSelector((state: RootState) => state.bet.totalPrice);
-  const { color } = useSelector((state: RootState) => state.game.game);
+  const { bets, totalPrice, game } = useContext(CartContext);
+  const { color } = game;
+
+  toast.configure();
   const dispatch = useAppDispatch();
+  const history = useHistory();
+
   let contentCart;
 
+  const cartIsEmpty = bets.length === 0;
+
   const saveBetHandler = () => {
-    dispatch(saveBet(items));
+    let notificationSuccess =
+      bets.length === 1 ? 'Aposta adicionada.' : 'Apostas adicionadas.';
+    let notificationError =
+      'Para salvar suas apostas, o valor miníno é de R$30,00.';
+    if (totalPrice >= 30) {
+      dispatch(saveBet(bets));
+      showNotificationSucess(notificationSuccess);
+      setTimeout(() => history.push('/'), 1000);
+    } else if (totalPrice < 30) showNotificationError(notificationError);
   };
 
   const convertToBRL = (num: number) =>
@@ -28,10 +49,10 @@ const Cart: React.FC = () => {
       currency: 'BRL',
     });
 
-  if (items.length === 0) {
+  if (cartIsEmpty) {
     contentCart = <p>Empty cart</p>;
   } else {
-    contentCart = items.map(item => (
+    contentCart = bets.map(item => (
       <Item
         key={item.id}
         id={item.id}
@@ -50,13 +71,20 @@ const Cart: React.FC = () => {
       <Container>
         <Title>CART</Title>
         <Content>{contentCart}</Content>
-        <TotalPrice>
-          <span>CART</span>
-          <p>TOTAL: {convertToBRL(totalPrice)}</p>
-        </TotalPrice>
+        {!cartIsEmpty && (
+          <TotalPrice>
+            <span>CART</span>
+            <p>TOTAL: {convertToBRL(totalPrice)}</p>
+          </TotalPrice>
+        )}
       </Container>
       <ButtoSaveContainer>
-        <Button onClick={saveBetHandler} color={color} arrow='right'>
+        <Button
+          disabled={cartIsEmpty}
+          onClick={saveBetHandler}
+          color={color}
+          arrow='right'
+        >
           Save
         </Button>
       </ButtoSaveContainer>

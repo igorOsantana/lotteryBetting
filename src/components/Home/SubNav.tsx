@@ -6,6 +6,8 @@ import { Bet } from '../../store/slices/betReducer';
 
 interface SubnavProps {
   games: Bet[];
+  onFilterGame: (type: string) => void;
+  typeClicked: string;
 }
 
 interface FilterProps {
@@ -14,7 +16,11 @@ interface FilterProps {
   id: number;
 }
 
-const SubNav: React.FC<SubnavProps> = ({ games }) => {
+const SubNav: React.FC<SubnavProps> = ({
+  games,
+  onFilterGame,
+  typeClicked,
+}) => {
   let contentFilter;
   let types: FilterProps[] = [];
 
@@ -30,9 +36,14 @@ const SubNav: React.FC<SubnavProps> = ({ games }) => {
     types = Array.from(clearDuplicateValues.values());
   };
 
-  const setTypesToBeFilter = () => {
+  const setContentFilters = () => {
     contentFilter = types.map(type => (
-      <ButtonFilter key={type.id} color={type.color}>
+      <ButtonFilter
+        onClick={() => onFilterGame(type.type)}
+        key={type.id}
+        color={type.color}
+        selected={typeClicked === type.type}
+      >
         {type.type}
       </ButtonFilter>
     ));
@@ -42,7 +53,7 @@ const SubNav: React.FC<SubnavProps> = ({ games }) => {
     contentFilter = null;
   } else {
     getTypesToBeFilter();
-    setTypesToBeFilter();
+    setContentFilters();
   }
 
   return (

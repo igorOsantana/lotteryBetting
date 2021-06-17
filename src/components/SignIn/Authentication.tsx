@@ -1,10 +1,9 @@
+import { useContext } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Formik, Form, FormikHelpers } from 'formik';
-import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
-import { useAppDispatch, RootState } from '../../store';
-import { logIn, AuthProps } from '../../store/slices/userReducer';
+import { AuthContext, CredencialProps } from '../../context/Auth/AuthContext';
 import Button from '../UI/Button/ButtonArrow';
 import InputWithValidation from '../UI/Input/InputWithValidation';
 import {
@@ -17,15 +16,14 @@ export const validationYup = Yup.object({
 });
 
 const Authentication: React.FC = () => {
-  const INITIAL_VALUES: AuthProps = { email: '', password: '' };
-  const dispatch = useAppDispatch();
-  const isLogged = useSelector((state: RootState) => state.user.isLogged);
+  const INITIAL_VALUES: CredencialProps = { email: '', password: '' };
+  const { isLogged, signIn } = useContext(AuthContext);
 
   const submitHandler = (
-    values: AuthProps,
-    { setSubmitting }: FormikHelpers<AuthProps>
+    values: CredencialProps,
+    { setSubmitting }: FormikHelpers<CredencialProps>
   ) => {
-    dispatch(logIn(values));
+    signIn(values);
     setSubmitting(false);
   };
 

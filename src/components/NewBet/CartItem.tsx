@@ -1,6 +1,7 @@
+import { useContext } from 'react';
+import { CartContext } from '../../context/Cart/CartContext';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { useAppDispatch } from '../../store';
-import { removeBet } from '../../store/slices/betReducer';
+
 import {
   Container,
   DataInfo,
@@ -20,10 +21,10 @@ interface CartItemProps {
 }
 
 const CartItem: React.FC<CartItemProps> = props => {
-  const dispatch = useAppDispatch();
+  const { removeBetById } = useContext(CartContext);
 
   const removeItemCartHandler = () => {
-    dispatch(removeBet({ id: props.id, price: props.price }));
+    removeBetById(props.id, props.price);
   };
 
   return (
