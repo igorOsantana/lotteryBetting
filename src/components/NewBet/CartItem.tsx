@@ -1,7 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CartContext } from '../../context/Cart/CartContext';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
+import { CartProps } from './Cart';
 import {
   Container,
   DataInfo,
@@ -10,7 +11,7 @@ import {
   GameAndPrice,
 } from '../../styles/components/NewBet/CartItemStyled';
 
-interface CartItemProps {
+interface CartItemProps extends CartProps {
   id: number;
   color: string;
   numbers: string;
@@ -24,7 +25,8 @@ const CartItem: React.FC<CartItemProps> = props => {
   const { removeBetById } = useContext(CartContext);
 
   const removeItemCartHandler = () => {
-    removeBetById(props.id, props.price);
+    props.onDeleteBet(true);
+    props.confirmDelete && removeBetById(props.id, props.price);
   };
 
   return (

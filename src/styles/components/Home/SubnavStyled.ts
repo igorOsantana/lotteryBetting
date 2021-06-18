@@ -27,7 +27,7 @@ export const Container = styled.nav`
     margin-right: 1rem;
 
     @media (max-width: 720px) {
-      margin-top: 1rem;
+      margin: 1rem auto;
     }
   }
   button {

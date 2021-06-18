@@ -11,6 +11,11 @@ export const Button = styled.button`
   margin: 0.2rem;
   transition: all 0.4s;
 
+  @media (max-width: 540px) {
+    width: 2rem;
+    height: 2rem;
+  }
+
   &:hover {
     filter: brightness(50%);
   }

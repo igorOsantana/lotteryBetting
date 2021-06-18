@@ -8,9 +8,9 @@ import store from './store/index';
 import 'react-toastify/dist/ReactToastify.css';
 
 //PAGES
-import HomePage from './pages/Home';
-import NewBetPage from './pages/NewBet';
-import SignInPage from './pages/SignIn';
+import HomePage from './pages/HomePage';
+import NewBetPage from './pages/NewBetPage';
+import SignInPage from './pages/SignPage';
 
 interface PrivateRouteProps {
   component: React.FC;

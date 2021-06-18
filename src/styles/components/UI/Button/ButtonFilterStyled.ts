@@ -10,12 +10,16 @@ export const Button = styled.button<ButtonFilterProps>`
   background: ${({ selected, color }) => (selected ? color : 'initial')};
   width: min-content;
   padding: 0.3rem 1rem;
-  margin: 0.5rem 1rem 0.5rem 0;
+  margin: 2px 5px;
   border: 2px solid ${({ color, theme }) => (color ? color : theme.greenLogo)};
   border-radius: 15px;
   font-weight: 900;
   white-space: nowrap;
   transition: all 0.4s;
+
+  @media (max-width: 540px) {
+    font-size: 0.75rem;
+  }
 
   &:hover {
     background-color: ${({ color, theme }) =>

@@ -1,8 +1,10 @@
-import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { SetStateAction, Dispatch, useContext, useState } from 'react';
 import { useAppDispatch } from '../../store';
 import { saveBet } from '../../store/slices/betReducer';
 import { toast } from 'react-toastify';
 import { CartContext } from '../../context/Cart/CartContext';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
 import {
   showNotificationSucess,
@@ -16,10 +18,17 @@ import {
   Content,
   TotalPrice,
   ButtoSaveContainer,
+  ButtonCart,
+  NumCart,
 } from '../../styles/components/NewBet/CartStyled';
-import { useHistory } from 'react-router-dom';
 
-const Cart: React.FC = () => {
+export interface CartProps {
+  onDeleteBet: Dispatch<SetStateAction<boolean>>;
+  confirmDelete: boolean;
+}
+
+const Cart: React.FC<CartProps> = ({ onDeleteBet, confirmDelete }) => {
+  const [showCartMobile, setShowCartMobile] = useState(false);
   const { bets, totalPrice, game } = useContext(CartContext);
   const { color } = game;
 
@@ -62,12 +71,18 @@ const Cart: React.FC = () => {
         price={item.price}
         date={item.date}
         convert={convertToBRL}
+        onDeleteBet={onDeleteBet}
+        confirmDelete={confirmDelete}
       />
     ));
   }
 
   return (
     <>
+      <ButtonCart>
+        <ShoppingCartOutlinedIcon />
+        <NumCart>{bets.length}</NumCart>
+      </ButtonCart>
       <Container>
         <Title>CART</Title>
         <Content>{contentCart}</Content>

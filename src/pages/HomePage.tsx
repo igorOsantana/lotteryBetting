@@ -6,6 +6,8 @@ import Navbar from '../components/UI/Navbar/Navbar';
 import SubNav from '../components/Home/SubNav';
 import ContentGames from '../components/Home/ContentGames';
 import Game from '../components/Home/Game';
+import Footer from '../components/UI/Footer/Footer';
+import { Container } from '../styles/pages/HomePageStyled';
 
 const HomePage: React.FC = () => {
   const gamesSaved = useSelector((state: RootState) => state.bet.savedBets);
@@ -46,18 +48,21 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <Navbar>
-      <SubNav
-        typeClicked={filterSelected}
-        onFilterGame={filterGame}
-        games={gamesSaved}
-      />
-      <ContentGames>
-        {contentGameFilter.length === 0 || filterSelected === ''
-          ? contentGame
-          : contentGameFilter}
-      </ContentGames>
-    </Navbar>
+    <Container>
+      <Navbar>
+        <SubNav
+          typeClicked={filterSelected}
+          onFilterGame={filterGame}
+          games={gamesSaved}
+        />
+        <ContentGames>
+          {contentGameFilter.length === 0 || filterSelected === ''
+            ? contentGame
+            : contentGameFilter}
+        </ContentGames>
+      </Navbar>
+      <Footer />
+    </Container>
   );
 };
 

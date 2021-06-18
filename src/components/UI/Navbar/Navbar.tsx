@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../context/Auth/AuthContext';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import {
@@ -8,12 +9,12 @@ import {
   Content,
   Logo,
   NavList,
+  NavToggle,
 } from '../../../styles/components/UI/Navbar/NavbarStyled';
-import { useContext } from 'react';
-import { AuthContext } from '../../../context/Auth/AuthContext';
 
 const Navbar: React.FC = props => {
   const [showHomeLink, setShowHomeLink] = useState(false);
+  const [showNavToggle, setShowNavToggle] = useState(false);
   const currentUrl = useLocation().pathname;
   const { signOut } = useContext(AuthContext);
 
@@ -29,9 +30,9 @@ const Navbar: React.FC = props => {
   return (
     <>
       <Container>
-        <Content>
-          <Logo>TGL</Logo>
-          <NavList isHome={showHomeLink}>
+        <Content isMobile={showNavToggle}>
+          <Logo isMobile={showNavToggle}>TGL</Logo>
+          <NavList isMobile={showNavToggle} isHome={showHomeLink}>
             {showHomeLink && (
               <li className='showHomeLink'>
                 <Link to='/'>Home</Link>
@@ -43,6 +44,14 @@ const Navbar: React.FC = props => {
               <ArrowForward fontSize='small' />
             </li>
           </NavList>
+          <NavToggle
+            isMobile={showNavToggle}
+            onClick={() => setShowNavToggle(prevState => !prevState)}
+          >
+            <div className='one'></div>
+            <div className='two'></div>
+            <div className='three'></div>
+          </NavToggle>
         </Content>
       </Container>
       {props.children}

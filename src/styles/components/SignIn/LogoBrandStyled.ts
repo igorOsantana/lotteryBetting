@@ -34,13 +34,14 @@ export const Logo = styled.div`
     p {
       margin: 0.5rem 0;
       padding: 0;
+      width: 100%;
     }
   }
   @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 0.75rem;
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1rem;
     }
   }
 `;

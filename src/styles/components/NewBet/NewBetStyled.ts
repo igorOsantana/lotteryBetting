@@ -8,6 +8,12 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  button {
+    @media (max-width: 540px) {
+      font-size: 0.75rem;
+    }
+  }
 `;
 
 export const Title = styled.h1`
@@ -34,9 +40,6 @@ export const Filters = styled.div`
     color: ${({ theme }) => theme.grayWhite};
     font-weight: bold;
     margin-bottom: 1rem;
-  }
-  button {
-    margin-right: 1.5rem;
   }
 `;
 
@@ -65,6 +68,14 @@ export const BallsContainer = styled.div<SelectedProps>`
 export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 540px) {
+    flex-wrap: wrap;
+  }
+
+  button {
+    margin-top: 1rem;
+  }
 
   div {
     display: flex;
