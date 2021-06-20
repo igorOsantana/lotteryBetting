@@ -32,9 +32,7 @@ const AuthContextProvider: React.FC = ({ children }) => {
     else showNotificationError('Email ou senha inválidos.');
   };
 
-  const signOutUser = () => {
-    setIsAuth(false);
-  };
+  const signOutUser = () => setIsAuth(false);
 
   const valuesContext: AuthProps = {
     isLogged: isAuth,

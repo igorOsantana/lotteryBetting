@@ -25,11 +25,11 @@ const SubNav: React.FC<SubnavProps> = ({
   let types: FilterProps[] = [];
 
   const getTypesToBeFilter = () => {
-    games.forEach((game) =>
+    games.forEach(game =>
       types.push({ type: game.type, color: game.color, id: game.id })
     );
     let clearDuplicateValues = new Map();
-    types.forEach((type) => {
+    types.forEach(type => {
       if (!clearDuplicateValues.has(type.type))
         clearDuplicateValues.set(type.type, type);
     });
@@ -37,7 +37,7 @@ const SubNav: React.FC<SubnavProps> = ({
   };
 
   const setContentFilters = () => {
-    contentFilter = types.map((type) => (
+    contentFilter = types.map(type => (
       <ButtonFilter
         onClick={() => onFilterGame(type.type)}
         key={type.id}

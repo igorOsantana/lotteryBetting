@@ -1,4 +1,4 @@
-import { useState, createContext } from 'react';
+import { useState, createContext, useCallback } from 'react';
 
 import RULES from '../../games.json';
 
@@ -56,20 +56,23 @@ const CarContextProvider: React.FC = ({ children }) => {
     setSelectedBalls(balls);
   };
 
-  const clearBalls = () => {
+  const clearBalls = useCallback(() => {
     setSelectedBalls([]);
-  };
+  }, []);
 
-  const addNewBet = (bet: Bet) => {
+  const addNewBet = useCallback((bet: Bet) => {
     setBets(currentBets => [...currentBets, bet]);
     setTotalPrice(currentAmount => (currentAmount += bet.price));
-  };
+  }, []);
 
-  const removeBetById = (id: number, price: number) => {
-    const betsUpdated = bets.filter(bet => bet.id !== id);
-    setBets(betsUpdated);
-    setTotalPrice(currentPrice => currentPrice - price);
-  };
+  const removeBetById = useCallback(
+    (id: number, price: number) => {
+      const betsUpdated = bets.filter(bet => bet.id !== id);
+      setBets(betsUpdated);
+      setTotalPrice(currentPrice => currentPrice - price);
+    },
+    [bets]
+  );
 
   const valuesContext: CartContextProps = {
     game,

@@ -2,7 +2,9 @@ import { useContext, useState } from 'react';
 import { CartContext } from '../../context/Cart/CartContext';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-import { CartProps } from './Cart';
+import ModalConfirm, {
+  ModalConfirmContentProps,
+} from '../../components/UI/Modal/ModalConfirm';
 import {
   Container,
   DataInfo,
@@ -10,8 +12,9 @@ import {
   Numbers,
   GameAndPrice,
 } from '../../styles/components/NewBet/CartItemStyled';
+import { useEffect } from 'react';
 
-interface CartItemProps extends CartProps {
+interface CartItemProps {
   id: number;
   color: string;
   numbers: string;
@@ -22,26 +25,43 @@ interface CartItemProps extends CartProps {
 }
 
 const CartItem: React.FC<CartItemProps> = props => {
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   const { removeBetById } = useContext(CartContext);
 
-  const removeItemCartHandler = () => {
-    props.onDeleteBet(true);
-    props.confirmDelete && removeBetById(props.id, props.price);
+  const contentModalDelete: ModalConfirmContentProps = {
+    header: 'Delete bet',
+    body: 'Do you want to delete the bet?',
+    color: '#f00',
+    actionButton: 'Delete',
+    show: showModalDelete,
+    setShow: setShowModalDelete,
+    setConfirm: setConfirmDelete,
   };
 
+  const removeItemCartHandler = () => setShowModalDelete(true);
+
+  useEffect(() => {
+    confirmDelete && removeBetById(props.id, props.price);
+  }, [confirmDelete, removeBetById, props.id, props.price]);
+
   return (
-    <Container>
-      <ButtonDelete onClick={removeItemCartHandler}>
-        <DeleteForeverIcon />
-      </ButtonDelete>
-      <DataInfo color={props.color}>
-        <Numbers>{props.numbers}</Numbers>
-        <GameAndPrice color={props.color}>
-          {props.game}
-          <span>{props.convert(props.price)}</span>
-        </GameAndPrice>
-      </DataInfo>
-    </Container>
+    <>
+      {showModalDelete && <ModalConfirm content={contentModalDelete} />}
+      <Container>
+        <ButtonDelete onClick={removeItemCartHandler}>
+          <DeleteForeverIcon />
+        </ButtonDelete>
+        <DataInfo color={props.color}>
+          <Numbers>{props.numbers}</Numbers>
+          <GameAndPrice color={props.color}>
+            {props.game}
+            <span>{props.convert(props.price)}</span>
+          </GameAndPrice>
+        </DataInfo>
+      </Container>
+    </>
   );
 };
 

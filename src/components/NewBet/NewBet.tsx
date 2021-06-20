@@ -1,7 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useState, useCallback, useEffect } from 'react';
 import RULES from '../../games.json';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
+import ModalConfirm from '../../components/UI/Modal/ModalConfirm';
 import { Bet, CartContext } from '../../context/Cart/CartContext';
 import { showNotificationError } from '../../notifications';
 import ButtonNewBet from '../UI/Button/ButtonNewBet';
@@ -17,8 +18,11 @@ import {
 } from '../../styles/components/NewBet/NewBetStyled';
 
 const NewBet: React.FC = () => {
+  const [newBetState, setNewBetState] = useState<Bet>();
+  const [showModalAdd, setShowModalAdd] = useState(false);
+  const [confirmAdd, setConfirmAdd] = useState(false);
+  let balls: JSX.Element[] = [];
   const { types } = RULES;
-
   const {
     game,
     selectedBalls,
@@ -30,7 +34,21 @@ const NewBet: React.FC = () => {
     addNewBet,
   } = useContext(CartContext);
 
-  let balls: JSX.Element[] = [];
+  const textsNotification = {
+    maxNum: `Esse jogo aceita apenas ${game['max-number']} números.`,
+    sameNums: 'Você já fez uma aposta com esses números.',
+    notEnoughNum: `Adicione mais números. Você selecionou ${selectedBalls.length} em um total de ${game['max-number']}.`,
+  };
+
+  const contentModalAdd = {
+    header: 'Add a new bet',
+    body: 'Do you want to add the bet?',
+    color: '#3E8914',
+    actionButton: 'Add',
+    show: showModalAdd,
+    setShow: setShowModalAdd,
+    setConfirm: setConfirmAdd,
+  };
 
   const filterHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     const typeClicked = event.currentTarget.innerText;
@@ -38,16 +56,16 @@ const NewBet: React.FC = () => {
     clearBallsSelected();
   };
 
-  const selectGameHandler = (typeClicked: string | null) => {
+  const selectGameHandler = (typeClicked: string) => {
     const gameSelected = types.filter(game => game.type === typeClicked)[0];
     selectGame(gameSelected);
   };
 
-  const clearBallsSelected = () => {
+  const clearBallsSelected = useCallback(() => {
     const ballsSelected = document.querySelectorAll('.selected');
     ballsSelected.forEach(ball => ball.classList.remove('selected'));
     clearBalls();
-  };
+  }, [clearBalls]);
 
   const getNumberOfBall = (event: React.MouseEvent<HTMLButtonElement>) => {
     const ballClicked = Number(event.currentTarget.textContent);
@@ -59,9 +77,7 @@ const NewBet: React.FC = () => {
       selectBall(ballClicked);
       event.currentTarget.classList.toggle('selected');
     } else {
-      showNotificationError(
-        `Esse jogo aceita apenas ${game['max-number']} números.`
-      );
+      showNotificationError(textsNotification.maxNum);
     }
   };
 
@@ -69,6 +85,10 @@ const NewBet: React.FC = () => {
     const allBalls = document.querySelectorAll('[data-js=betBall]');
     const maxNumbersCanSelect = game['max-number'];
     const difBetween = maxNumbersCanSelect - selectedBalls.length;
+    if (difBetween === 0) {
+      showNotificationError(textsNotification.maxNum);
+      return;
+    }
     const arrayRandomNumbers = getNumbersRandonly(difBetween);
     setBallRandonly(arrayRandomNumbers, allBalls);
   };
@@ -99,33 +119,32 @@ const NewBet: React.FC = () => {
     });
   };
 
-  const addToCart = () => {
+  const addToCartHandler = () => {
     if (hasEnoughNumbers() === false) return;
+
     const newBet = {
       id: new Date().getTime() + Math.random(),
       type: game.type,
-      balls: selectedBalls,
+      balls: selectedBalls.sort((a, b) => a - b),
       price: game.price,
       color: game.color,
       date: new Date().toLocaleDateString(),
     };
     if (alreadyHasThatBet(newBet) === false) {
-      addNewBet(newBet);
-      clearBallsSelected();
-    } else {
-      showNotificationError('Você já fez uma aposta com esses números.');
-    }
+      setNewBetState(newBet);
+      setShowModalAdd(true);
+    } else showNotificationError(textsNotification.sameNums);
   };
 
   const hasEnoughNumbers = () => {
     const isValid = selectedBalls.length === game['max-number'];
 
     if (isValid === false) {
-      const howManyNumRemaining = game['max-number'] - selectedBalls.length;
-      let stringNum = howManyNumRemaining === 1 ? 'número' : 'números';
-      showNotificationError(
-        `Você precisa adicionar mais ${howManyNumRemaining} ${stringNum}. Você selecionou ${selectedBalls.length} em um total de ${game['max-number']}.`
-      );
+      let notification =
+        selectedBalls.length === 0
+          ? 'Nenhum número selecionado.'
+          : textsNotification.notEnoughNum;
+      showNotificationError(notification);
       return false;
     } else if (isValid) return true;
   };
@@ -152,46 +171,57 @@ const NewBet: React.FC = () => {
     );
   }
 
+  useEffect(() => {
+    if (confirmAdd && newBetState) {
+      addNewBet(newBetState);
+      clearBallsSelected();
+      setConfirmAdd(false);
+    }
+  }, [confirmAdd, newBetState, addNewBet, clearBallsSelected]);
+
   return (
-    <Container>
-      <Title>
-        NEW BET<span>FOR {game.type.toUpperCase()}</span>
-      </Title>
-      <Filters>
-        <p>Choose a game</p>
-        <div>
-          {types.map(gameFilter => (
-            <ButtonFilter
-              key={gameFilter.type}
-              onClick={filterHandler}
-              color={gameFilter.color}
-              selected={gameFilter.type === game.type}
-            >
-              {gameFilter.type}
-            </ButtonFilter>
-          ))}
-        </div>
-      </Filters>
-      <Description>
-        <span>Fill your bet</span>
-        <p>{game.description}</p>
-      </Description>
-      <BallsContainer color={game.color}>{balls}</BallsContainer>
-      <ButtonsContainer>
-        <div>
-          <ButtonNewBet color={game.color} onClick={completeGameHandler}>
-            Complete game
+    <>
+      {showModalAdd && <ModalConfirm content={contentModalAdd} />}
+      <Container>
+        <Title>
+          NEW BET<span>FOR {game.type.toUpperCase()}</span>
+        </Title>
+        <Filters>
+          <p>Choose a game</p>
+          <div>
+            {types.map(gameFilter => (
+              <ButtonFilter
+                key={gameFilter.type}
+                onClick={filterHandler}
+                color={gameFilter.color}
+                selected={gameFilter.type === game.type}
+              >
+                {gameFilter.type}
+              </ButtonFilter>
+            ))}
+          </div>
+        </Filters>
+        <Description>
+          <span>Fill your bet</span>
+          <p>{game.description}</p>
+        </Description>
+        <BallsContainer color={game.color}>{balls}</BallsContainer>
+        <ButtonsContainer>
+          <div>
+            <ButtonNewBet color={game.color} onClick={completeGameHandler}>
+              Complete game
+            </ButtonNewBet>
+            <ButtonNewBet color={game.color} onClick={clearBallsSelected}>
+              Clear game
+            </ButtonNewBet>
+          </div>
+          <ButtonNewBet color={game.color} onClick={addToCartHandler}>
+            <ShoppingCartOutlinedIcon />
+            &nbsp;Add to cart
           </ButtonNewBet>
-          <ButtonNewBet color={game.color} onClick={clearBallsSelected}>
-            Clear game
-          </ButtonNewBet>
-        </div>
-        <ButtonNewBet color={game.color} onClick={addToCart}>
-          <ShoppingCartOutlinedIcon />
-          &nbsp;Add to cart
-        </ButtonNewBet>
-      </ButtonsContainer>
-    </Container>
+        </ButtonsContainer>
+      </Container>
+    </>
   );
 };
 

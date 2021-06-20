@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import { SetStateAction, Dispatch, useContext, useState } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { useAppDispatch } from '../../store';
 import { saveBet } from '../../store/slices/betReducer';
 import { toast } from 'react-toastify';
@@ -21,16 +21,21 @@ import {
   ButtonCart,
   NumCart,
 } from '../../styles/components/NewBet/CartStyled';
+import CartModal from './CartModal';
+import { useEffect } from 'react';
 
-export interface CartProps {
-  onDeleteBet: Dispatch<SetStateAction<boolean>>;
-  confirmDelete: boolean;
-}
-
-const Cart: React.FC<CartProps> = ({ onDeleteBet, confirmDelete }) => {
+const Cart: React.FC = () => {
   const [showCartMobile, setShowCartMobile] = useState(false);
+  const [confirmSaveBet, setConfirmSaveBet] = useState(false);
   const { bets, totalPrice, game } = useContext(CartContext);
   const { color } = game;
+
+  const contentCartMobile = {
+    color: game.color,
+    show: showCartMobile,
+    setShow: setShowCartMobile,
+    setConfirm: setConfirmSaveBet,
+  };
 
   toast.configure();
   const dispatch = useAppDispatch();
@@ -40,7 +45,7 @@ const Cart: React.FC<CartProps> = ({ onDeleteBet, confirmDelete }) => {
 
   const cartIsEmpty = bets.length === 0;
 
-  const saveBetHandler = () => {
+  const saveBetHandler = useCallback(() => {
     let notificationSuccess =
       bets.length === 1 ? 'Aposta adicionada.' : 'Apostas adicionadas.';
     let notificationError =
@@ -50,7 +55,7 @@ const Cart: React.FC<CartProps> = ({ onDeleteBet, confirmDelete }) => {
       showNotificationSucess(notificationSuccess);
       setTimeout(() => history.push('/'), 1000);
     } else if (totalPrice < 30) showNotificationError(notificationError);
-  };
+  }, [bets, totalPrice, dispatch, history]);
 
   const convertToBRL = (num: number) =>
     num.toLocaleString('pt-BR', {
@@ -71,15 +76,31 @@ const Cart: React.FC<CartProps> = ({ onDeleteBet, confirmDelete }) => {
         price={item.price}
         date={item.date}
         convert={convertToBRL}
-        onDeleteBet={onDeleteBet}
-        confirmDelete={confirmDelete}
       />
     ));
   }
 
+  useEffect(() => {
+    if (confirmSaveBet) {
+      saveBetHandler();
+      setConfirmSaveBet(false);
+    }
+  }, [confirmSaveBet, saveBetHandler]);
+
   return (
     <>
-      <ButtonCart>
+      {showCartMobile && (
+        <CartModal content={contentCartMobile}>
+          <Content>{contentCart}</Content>
+          {!cartIsEmpty && (
+            <TotalPrice>
+              <span>CART</span>
+              <p>TOTAL: {convertToBRL(totalPrice)}</p>
+            </TotalPrice>
+          )}
+        </CartModal>
+      )}
+      <ButtonCart onClick={() => setShowCartMobile(true)}>
         <ShoppingCartOutlinedIcon />
         <NumCart>{bets.length}</NumCart>
       </ButtonCart>

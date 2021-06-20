@@ -1,8 +1,8 @@
 import styled, { keyframes } from 'styled-components';
 
 interface ModalProps {
-  color?: string;
   show?: boolean;
+  color?: string;
 }
 
 const slideIn = keyframes`
@@ -15,7 +15,6 @@ const slideIn = keyframes`
         top: 30vh;
     }
 `;
-
 const slideOut = keyframes`
     from { 
         opacity: 1;
@@ -31,9 +30,8 @@ export const Container = styled.main<ModalProps>`
   display: flex;
   flex-direction: column;
   position: fixed;
-  top: 20vh;
   right: 50%;
-  transform: translateX(50%);
+  transform: translate(50%, -20%);
   border: 3px solid ${({ theme }) => theme.grayLight};
   border-radius: 10px;
   padding: 0.5rem;
@@ -49,7 +47,6 @@ export const Container = styled.main<ModalProps>`
 export const Header = styled.header`
   padding: 1rem 1.5rem;
   font-weight: bold;
-  text-align: center;
   border-bottom: 1px solid ${({ theme }) => theme.borderLight};
 `;
 
