@@ -27,6 +27,16 @@ const slideOut = keyframes`
     }
 `;
 
+export const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 199;
+  background: rgba(0, 0, 0, 0.6);
+`;
+
 export const Container = styled.main<ModalProps>`
   display: flex;
   flex-direction: column;
@@ -37,7 +47,7 @@ export const Container = styled.main<ModalProps>`
   border: 3px solid ${({ theme }) => theme.grayLight};
   border-radius: 10px;
   padding: 0.5rem;
-  z-index: 100;
+  z-index: 200;
   width: 50%;
   min-width: 20rem;
   height: min-content;

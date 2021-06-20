@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { Dispatch, SetStateAction } from 'react';
 import ReactDOM from 'react-dom';
 
-import { Backdrop } from '../../../styles/components/UI/Modal/BackdropModal';
 import {
+  Backdrop,
   Container,
   Header,
   Body,

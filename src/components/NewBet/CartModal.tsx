@@ -2,13 +2,13 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 import {
+  Backdrop,
   Container,
   Header,
   Body,
   Footer,
   Button,
 } from '../../styles/components/NewBet/CartModalStyled';
-import { Backdrop } from '../../styles/components/UI/Modal/BackdropModal';
 
 export interface ModalProps {
   color: string;

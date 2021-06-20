@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { createContext } from 'react';
+import { toast } from 'react-toastify';
+
 import { showNotificationError } from '../../notifications';
 
 const USERS = [
@@ -24,6 +26,8 @@ export const AuthContext = createContext({} as AuthProps);
 
 const AuthContextProvider: React.FC = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
+
+  toast.configure();
 
   const authenticateUser = (values: CredencialProps) => {
     const account = USERS.filter(user => user.email === values.email);

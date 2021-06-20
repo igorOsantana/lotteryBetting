@@ -91,13 +91,11 @@ export const NavList = styled.ul<NavProps>`
 export const NavToggle = styled.div<NavProps>`
   width: 40px;
   height: 30px;
-  margin-left: auto;
   cursor: pointer;
   display: none;
-
   @media (max-width: 540px) {
     ${({ isMobile }) =>
-      isMobile ? `position: absolute; top: 15px; right: 5rem;` : null}
+      isMobile ? `position: absolute; top: 17px; right: 15%;` : null}
     display: block;
   }
 
