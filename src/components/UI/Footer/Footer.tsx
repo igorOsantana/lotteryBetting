@@ -1,4 +1,4 @@
-import { Container } from '../../../styles/components/UI/Footer/FooterStyled';
+import { Container } from './FooterStyled';
 
 const Footer: React.FC = () => {
   return <Container>Copyright 2020 Luby Software</Container>;

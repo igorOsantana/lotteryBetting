@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import AuthContextProvider, { AuthContext } from './context/Auth/AuthContext';
-import GlobalStyle, { colors } from './styles/GlobalStyled';
+import GlobalStyle, { colors } from './GlobalStyled';
 import store from './store/index';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import HomePage from './pages/HomePage';
 import NewBetPage from './pages/NewBetPage';
 import SignInPage from './pages/SignPage';
+import AccountPage from './pages/AccountPage';
 
 interface PrivateRouteProps {
   component: React.FC;
@@ -33,6 +34,7 @@ const App: React.FC = () => {
             <GlobalStyle />
             <Route path='/sign' component={SignInPage} />
             <PrivateRoute exact path='/' component={HomePage} />
+            <PrivateRoute exact path='/account' component={AccountPage} />
             <PrivateRoute exact path='/new-bet' component={NewBetPage} />
           </AuthContextProvider>
         </ThemeProvider>

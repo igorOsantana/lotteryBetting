@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 import {
@@ -9,30 +8,28 @@ import {
   Body,
   Footer,
   Button,
-} from './ModalConfirmStyled';
+} from './CartModalStyled';
 
-export interface ModalConfirmContentProps {
-  header: string;
-  body: string;
+export interface ModalProps {
   color: string;
-  actionButton: string;
   show: boolean;
+  empty: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
   setConfirm: Dispatch<SetStateAction<boolean>>;
 }
 
-interface ModalProps {
-  content: ModalConfirmContentProps;
+interface CartModalProps {
+  content: ModalProps;
 }
 
-const ModalConfirm: React.FC<ModalProps> = ({ content }) => {
+const CartModal: React.FC<CartModalProps> = ({ content, children }) => {
   const closeModalHandler = () => {
     content.setConfirm(false);
     content.setShow(false);
     document.body.style.overflowY = 'auto';
   };
 
-  const confirmModalHandler = () => {
+  const saveCartHandler = () => {
     content.setConfirm(true);
     content.setShow(false);
     document.body.style.overflowY = 'auto';
@@ -51,14 +48,16 @@ const ModalConfirm: React.FC<ModalProps> = ({ content }) => {
       {ReactDOM.createPortal(
         <Container>
           <Header>
-            <h1>{content.header}</h1>
+            <h1>CART</h1>
           </Header>
-          <Body>{content.body}</Body>
+          <Body>{children}</Body>
           <Footer>
-            <Button onClick={closeModalHandler}>Cancel</Button>
-            <Button onClick={confirmModalHandler} color={content.color}>
-              {content.actionButton}
-            </Button>
+            <Button onClick={closeModalHandler}>Back</Button>
+            {content.empty === false && (
+              <Button onClick={saveCartHandler} color={content.color}>
+                Save
+              </Button>
+            )}
           </Footer>
         </Container>,
         document.getElementById('modal-root') as HTMLDivElement
@@ -67,4 +66,4 @@ const ModalConfirm: React.FC<ModalProps> = ({ content }) => {
   );
 };
 
-export default ModalConfirm;
+export default CartModal;

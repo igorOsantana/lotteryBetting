@@ -4,41 +4,38 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/Auth/AuthContext';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import {
-  Container,
-  Content,
-  Logo,
-  NavList,
-  NavToggle,
-} from '../../../styles/components/UI/Navbar/NavbarStyled';
+import { Container, Content, Logo, NavList, NavToggle } from './NavbarStyled';
 
 const Navbar: React.FC = props => {
-  const [showHomeLink, setShowHomeLink] = useState(false);
   const [showNavToggle, setShowNavToggle] = useState(false);
   const currentUrl = useLocation().pathname;
   const { signOut } = useContext(AuthContext);
 
   useEffect(() => {
-    if (currentUrl === '/new-bet') setShowHomeLink(true);
-    else setShowHomeLink(false);
-  }, [currentUrl]);
+    if (showNavToggle) document.body.style.overflowY = 'hidden';
+    else document.body.style.overflowY = 'auto';
+  }, [currentUrl, showNavToggle]);
 
-  const logOutHandler = () => {
-    signOut();
-  };
+  const logOutHandler = () => signOut();
 
   return (
     <>
       <Container>
         <Content isMobile={showNavToggle}>
           <Logo isMobile={showNavToggle}>TGL</Logo>
-          <NavList isMobile={showNavToggle} isHome={showHomeLink}>
-            {showHomeLink && (
+          <NavList
+            isMobile={showNavToggle}
+            isHome={currentUrl === '/'}
+            isAccount={currentUrl === '/account'}
+          >
+            {currentUrl !== '/' && (
               <li className='showHomeLink'>
                 <Link to='/'>Home</Link>
               </li>
             )}
-            <li>Account</li>
+            <li className={currentUrl === '/account' ? 'linkSelected' : ''}>
+              <Link to='/account'>Account</Link>
+            </li>
             <li onClick={logOutHandler}>
               Log&nbsp;out&nbsp;
               <ArrowForward fontSize='small' />

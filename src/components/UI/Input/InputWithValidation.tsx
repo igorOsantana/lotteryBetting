@@ -1,5 +1,5 @@
 import { Field, ErrorMessage, useField } from 'formik';
-import { InputContainer } from '../../../styles/components/UI/Input/InputWithValidationStyled';
+import { InputContainer } from './InputWithValidationStyled';
 
 interface InputProps {
   name: string;
@@ -7,7 +7,7 @@ interface InputProps {
   placeholder: string;
 }
 
-const InputWithValidation: React.FC<InputProps> = (props) => {
+const InputWithValidation: React.FC<InputProps> = props => {
   const [, meta] = useField(props);
 
   return (
