@@ -2,14 +2,12 @@ import styled from 'styled-components';
 
 export const Container = styled.section`
   display: flex;
-  flex-wrap: nowrap;
   margin-bottom: 2rem;
   font-size: 1.25rem;
-  height: 5rem;
 `;
 
 export const BorderColor = styled.div`
-  height: 100%;
+  height: inherit;
   width: 0.3rem;
   margin-right: 1rem;
   border: 1px solid ${({ color }) => color};

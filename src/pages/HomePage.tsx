@@ -12,7 +12,7 @@ import { Container } from '../styles/pages/HomePageStyled';
 const HomePage: React.FC = () => {
   const gamesSaved = useSelector((state: RootState) => state.bet.savedBets);
   const [contentGameFilter, setContentGameFilter] = useState<JSX.Element[]>([]);
-  const [filterSelected, setFilterSelected] = useState<string>('');
+  const [filterSelected, setFilterSelected] = useState<string>('empty');
   let contentGame;
 
   if (gamesSaved.length === 0) {
@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
   }
 
   const filterGame = (type: string) => {
-    setFilterSelected(currentType => (currentType === type ? '' : type));
+    setFilterSelected(currentType => (currentType === type ? 'empty' : type));
     const filteredGame = gamesSaved.filter(game => game.type === type);
     setContentGameFilter(
       filteredGame.map(game => (
@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
           games={gamesSaved}
         />
         <ContentGames>
-          {contentGameFilter.length === 0 || filterSelected === ''
+          {contentGameFilter.length === 0 || filterSelected === 'empty'
             ? contentGame
             : contentGameFilter}
         </ContentGames>
