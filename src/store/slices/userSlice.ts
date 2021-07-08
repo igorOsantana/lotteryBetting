@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppDispatch } from '..';
-import { isAuthenticated, setToken } from '../../services/auth';
+import { setToken } from '../../services/auth';
 import api from '../../services/api';
 
 export interface CredencialProps {
@@ -9,7 +9,7 @@ export interface CredencialProps {
 }
 
 const initialState = {
-  isLogged: isAuthenticated(),
+  isLogged: false,
   isLoading: false,
 };
 
@@ -41,7 +41,7 @@ export const authUser = (values: CredencialProps) => {
     dispatch(setLoading());
     try {
       const response = await api.post('/sessions', values);
-      setToken(response.data.token);
+      await setToken(response.data.token);
       dispatch(signIn());
     } catch (error) {
       console.log(error.message);

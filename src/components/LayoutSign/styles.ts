@@ -9,25 +9,23 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   header: {
-    flex: 2,
-    marginVertical: 25,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
   body: {
-    flex: 5,
-    marginVertical: 15,
     width: '100%',
   },
   footer: {
     color: theme.colors.gray_dark,
-    marginVertical: 15,
+    margin: 20,
   },
   title: {
     color: theme.colors.gray_dark,
     fontSize: 38,
     fontWeight: 'bold',
+    marginBottom: 20,
   },
   logoBrand: {
     color: theme.colors.gray_dark,

@@ -1,9 +1,8 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { authUser } from '../../store/slices/userSlice';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { validationYup } from '../SignIn';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 
@@ -15,35 +14,31 @@ import { InputPassword } from '../../components/InputPassword';
 import { styles } from './styles';
 
 type initialValuesProps = {
+  username: string;
   email: string;
   password: string;
 };
 
 const initialValues: initialValuesProps = {
+  username: '',
   email: '',
   password: '',
 };
 
-export const validationYup = Yup.object({
-  email: Yup.string().email('Email inválido.').required('Email é obrigatório.'),
-});
-
-export const SignIn = () => {
+export const SignUp = () => {
   const isAuthenticated = useAppSelector(state => state.users.isLogged);
   const isLoading = useAppSelector(state => state.users.isLoading);
 
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
-  const goToResetPasswordHandler = () => navigation.navigate('Reset Password');
-
-  const registerHandler = () => navigation.navigate('Sign Up');
+  const backToSignInHandler = () => navigation.goBack();
 
   const submitHandler = async (values: initialValuesProps) =>
-    dispatch(authUser(values));
+    console.log(values);
 
   return (
-    <LayoutSign title='Authentication'>
+    <LayoutSign title='Registration'>
       <Formik
         initialValues={initialValues}
         validationSchema={validationYup}
@@ -51,6 +46,12 @@ export const SignIn = () => {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
           <View style={styles.form}>
+            <InputDefault
+              label='Name'
+              onChangeText={handleChange('username')}
+              onBlur={handleBlur('username')}
+              value={values.username}
+            />
             <InputDefault
               label='Email'
               onChangeText={handleChange('email')}
@@ -68,20 +69,17 @@ export const SignIn = () => {
               onBlur={handleBlur('password')}
               value={values.password}
             />
-            <Text onPress={goToResetPasswordHandler} style={styles.forget}>
-              I forget my password
-            </Text>
             <View style={styles.viewButton}>
               <ButtonArrow onPress={handleSubmit as any}>
-                <Text>Log In</Text>
+                <Text>Register</Text>
               </ButtonArrow>
             </View>
           </View>
         )}
       </Formik>
       <View style={styles.viewButton}>
-        <ButtonArrow colorGray onPress={registerHandler}>
-          <Text>Sign Up</Text>
+        <ButtonArrow arrowLeft colorGray onPress={backToSignInHandler}>
+          <Text>Back</Text>
         </ButtonArrow>
       </View>
     </LayoutSign>

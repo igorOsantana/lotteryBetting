@@ -17,13 +17,6 @@ export const styles = StyleSheet.create({
     shadowRadius: 6.27,
     elevation: 5,
   },
-  forget: {
-    color: theme.colors.gray_light,
-    textAlign: 'right',
-    marginHorizontal: 35,
-    marginVertical: 15,
-    fontSize: 14,
-  },
   viewButton: {
     margin: 30,
     alignItems: 'center',

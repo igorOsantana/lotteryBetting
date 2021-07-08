@@ -2,6 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { SignIn } from '../screens/SignIn';
+import { SignUp } from '../screens/SignUp';
+import { ResetPassword } from '../screens/ResetPassword';
 
 import { theme } from '../global/styles/theme';
 
@@ -18,6 +20,8 @@ export const AuthRoutes = () => {
       }}
     >
       <Screen name='Sign In' component={SignIn} />
+      <Screen name='Sign Up' component={SignUp} />
+      <Screen name='Reset Password' component={ResetPassword} />
     </Navigator>
   );
 };

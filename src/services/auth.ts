@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const TOKEN_KEY = '@LB-token';
 
 export const isAuthenticated = async () =>
-  (await AsyncStorage.getItem(TOKEN_KEY)) !== null;
+  await AsyncStorage.getItem(TOKEN_KEY);
 
 export const getToken = async () => await AsyncStorage.getItem(TOKEN_KEY);
 
