@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   },
   error: {
     textAlign: 'right',
-    margin: 15,
+    marginHorizontal: 15,
     color: 'red',
     fontWeight: 'bold',
   },

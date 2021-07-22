@@ -1,24 +1,23 @@
 import React, { ReactNode } from 'react';
-import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
-import { Text, View, TextProps } from 'react-native';
+import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import { styles } from './styles';
 
-type Props = TextProps & {
+type ButtonArrowProps = TouchableOpacityProps & {
   children: ReactNode;
   arrowLeft?: boolean;
   colorGray?: boolean;
 };
 
-export const ButtonArrow = ({
+export const ButtonArrow: React.FC<ButtonArrowProps> = ({
   children,
   arrowLeft,
   colorGray,
-  ...rest
-}: Props) => {
+  ...props
+}) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity activeOpacity={0.7} {...props} style={styles.container}>
       {arrowLeft && (
         <AntDesign
           style={[styles.defaultColor, colorGray && styles.grayColor]}
@@ -27,7 +26,6 @@ export const ButtonArrow = ({
         />
       )}
       <Text
-        {...rest}
         numberOfLines={1}
         style={[
           styles.textButton,
@@ -46,6 +44,6 @@ export const ButtonArrow = ({
           size={24}
         />
       )}
-    </View>
+    </TouchableOpacity>
   );
 };

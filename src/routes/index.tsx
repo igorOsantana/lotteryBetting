@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { AuthRoutes } from './auth.routes';
+import { RootRoutes } from './root.routes';
 
-export const Routes = () => {
+export const Routes: React.FC = () => {
   return (
     <NavigationContainer>
-      <AuthRoutes />
+      <RootRoutes />
     </NavigationContainer>
   );
 };

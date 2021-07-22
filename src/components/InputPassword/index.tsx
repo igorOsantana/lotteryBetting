@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { HoshiProps } from 'react-native-textinput-effects';
-import {
-  View,
-  TextInput,
-  TextInputProps,
-  TouchableOpacity,
-} from 'react-native';
+import { View, TextInputProps, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { InputDefault } from '../InputDefault';
@@ -13,15 +8,21 @@ import { InputDefault } from '../InputDefault';
 import { theme } from '../../global/styles/theme';
 import { styles } from './styles';
 
-export const InputPassword = ({ ...rest }: TextInputProps & HoshiProps) => {
+export const InputPassword: React.FC<TextInputProps & HoshiProps> = ({
+  ...props
+}) => {
   const [hidePassword, setHidePassword] = useState(true);
 
   const handleHidePassword = () => setHidePassword(prevState => !prevState);
 
   return (
     <View style={styles.container}>
-      <InputDefault {...rest} secureTextEntry={hidePassword} />
-      <TouchableOpacity style={styles.icon} onPress={handleHidePassword}>
+      <InputDefault {...props} secureTextEntry={hidePassword} />
+      <TouchableOpacity
+        hitSlop={styles.hitSlop}
+        style={styles.icon}
+        onPress={handleHidePassword}
+      >
         {hidePassword ? (
           <Ionicons
             name='eye-outline'

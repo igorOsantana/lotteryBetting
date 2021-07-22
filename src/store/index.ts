@@ -1,12 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import betSlice from './slices/betSlice';
+import cartSlice from './slices/cartSlice';
 import userSlice from './slices/userSlice';
 
 export const store = configureStore({
   reducer: {
     users: userSlice,
-    bets: betSlice,
+    cart: cartSlice,
   },
 });
 

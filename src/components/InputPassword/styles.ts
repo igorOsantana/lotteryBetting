@@ -12,4 +12,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     right: 30,
   },
+  hitSlop: {
+    top: 25,
+    bottom: 25,
+    right: 50,
+    left: 50,
+  },
 });
